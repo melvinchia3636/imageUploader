@@ -1,30 +1,32 @@
-import middleware from "../../middleware/middleware";
-import nextConnect from "next-connect";
-import fs from "fs";
-import { cwd } from "process";
-import { v4 as uuidV4 } from "uuid";
+import { IncomingForm } from 'formidable';
+import { promises as fs } from 'fs';
+import { v4 } from 'uuid';
 
-const handler = nextConnect();
-handler.use(middleware);
-
-handler.post(async (req, res) => {
-  const file = req.files.file[0];
-  const fileName = uuidV4() + "." + file.originalFilename.split(".").pop();
-  const filePath = `${cwd()}/public/uploads/${fileName}`;
-  const content = fs.readFileSync(file.path);
-  fs.writeFileSync(filePath, content);
-
-  res.statusCode = 200;
-  res.json({
-    message: "success",
-    path: `/uploads/${fileName}`,
+export default async function handler(req, res) {
+  const data = await new Promise((resolve, reject) => {
+    const form = new IncomingForm();
+    form.parse(req, (err, fields, files) => {
+      if (err) return reject(err);
+      resolve({ fields, files });
+    });
   });
-});
+
+  try {
+    const imageFile = data.files.file; 
+    const imagePath = imageFile.filepath;
+    const pathToWriteImage = `./public/uploads/${v4()}.${imageFile.originalFilename.split('.').pop()}`;
+    const image = await fs.readFile(imagePath);
+    await fs.writeFile(pathToWriteImage, image);
+    //store path in DB
+    res.status(200).json({ message: "success", path: pathToWriteImage.slice(1).replace("/public", "") });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    return;
+  }
+};
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-export default handler;

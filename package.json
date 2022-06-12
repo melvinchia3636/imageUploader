@@ -12,6 +12,7 @@
     "@iconify/react": "^3.2.2",
     "animate.css": "^4.1.1",
     "autoprefixer": "^10.4.7",
+    "formidable": "^2.0.1",
     "multiparty": "^4.2.3",
     "next": "12.1.6",
     "next-connect": "^0.12.2",
