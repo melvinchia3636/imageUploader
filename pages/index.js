@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "animate.css";
 
-function UploadFileZone({ uploadFile, setStage, error, setError }) {
+function UploadFileZone({ uploadFile, error, setError }) {
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/png": [".png"],
