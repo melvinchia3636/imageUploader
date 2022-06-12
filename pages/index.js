@@ -117,17 +117,18 @@ function Uploaded({ imageUrl }) {
         src={imageUrl}
         className="w-full h-full object-contain mt-6 border-2 border-[#57DCBE] p-2"
       />
-      <div className="w-full border-2 border-[#57DCBE] overflow-hidden mt-4 flex items-center flex-grow-0 h-16">
-        <div className="text-center text-sm overflow-y-scroll px-6 container">
+      <div className="w-full border-2 border-[#57DCBE] overflow-hidden mt-4 flex flex-col sm:flex-row items-center flex-grow-0 h-20">
+        <div className="text-center text-sm overflow-y-scroll px-6 container hidden sm:block">
           <div className="pr-6 whitespace-nowrap inline-block">
-            https://images.thecodeblog.net/{imageUrl}
+            {location.href.slice(0, -1)}
+            {imageUrl}
           </div>
         </div>
         <button
-          className="px-6 block h-full bg-[#57DCBE] text-zinc-900 whitespace-nowrap font-medium tracking-[0.2rem] !text-xs uppercase"
+          className="px-6 block h-full bg-[#57DCBE] text-zinc-900 whitespace-nowrap font-medium tracking-[0.2rem] !text-xs uppercase py-4 w-full sm:w-auto"
           onClick={() => {
             navigator.clipboard.writeText(
-              `https://images.thecodeblog.net/${imageUrl}`
+              `${location.href.slice(0, -1)}${imageUrl}`
             );
             setCopied(true);
             setTimeout(() => {
@@ -166,12 +167,12 @@ function App() {
 
   return (
     <main
-      className={`w-full h-screen bg-zinc-900 ${
+      className={`w-full px-8 h-screen bg-zinc-900 ${
         error ? "text-rose-500" : "text-[#57DCBE]"
-      } flex items-center justify-center font-['MiSans']`}
+      } flex flex-col items-center justify-center pb-10 font-['MiSans']`}
     >
       <div
-        className={`w-5/12 max-h-[calc(100%-10rem)] border-2 animate__animated animate__fast ${
+        className={`w-full sm:w-8/12 lg:w-5/12 max-h-[calc(100%-8rem)] border-2 animate__animated animate__fast ${
           error ? "border-rose-500 animate__shakeX" : "border-[#57DCBE]"
         } p-8 flex flex-col items-center`}
       >
@@ -189,6 +190,18 @@ function App() {
           ][stage]
         }
       </div>
+      <p className="text-sm text-center w-full pb-4 absolute bottom-0 left-1/2 -translate-x-1/2">
+        Made with 💚 by{" "}
+        <a
+          className="underline"
+          href="https://thecodeblog.net"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Melvin Chia
+        </a>
+        . Project under MIT license.
+      </p>
     </main>
   );
 }
