@@ -114,22 +114,20 @@ function Uploaded({ imageUrl }) {
       </h1>
       <img
         alt=""
-        src={imageUrl}
+        src={"https://images.thecodeblog.net"+imageUrl}
         className="w-full h-full object-contain mt-6 border-2 border-[#57DCBE] p-2"
       />
       <div className="w-full border-2 border-[#57DCBE] overflow-hidden mt-4 flex flex-col sm:flex-row items-center flex-grow-0 h-20">
         <div className="text-center text-sm overflow-y-scroll px-6 container hidden sm:block">
           <div className="pr-6 whitespace-nowrap inline-block">
-            {location.href.slice(0, -1)}
+            https://images.thecodeblog.net
             {imageUrl}
           </div>
         </div>
         <button
           className="px-6 block h-full bg-[#57DCBE] text-zinc-900 whitespace-nowrap font-medium tracking-[0.2rem] !text-xs uppercase py-4 w-full sm:w-auto"
           onClick={() => {
-            navigator.clipboard.writeText(
-              `${location.href.slice(0, -1)}${imageUrl}`
-            );
+            navigator.clipboard.writeText(`https://images.thecodeblog.net${imageUrl}`);
             setCopied(true);
             setTimeout(() => {
               setCopied(false);
@@ -152,7 +150,7 @@ function App() {
     setStage(1);
     const formData = new FormData();
     formData.append("file", file);
-    const response = await fetch("http://localhost:3001/upload", {
+    const response = await fetch("https://images.thecodeblog.net/upload", {
       method: "POST",
       body: formData,
     });

@@ -31,12 +31,18 @@ app.post('/upload', async (req, res) => {
       .status(200)
       .send({
         message: "success",
-        path: pathToWriteImage.slice(1),
+        path: pathToWriteImage.slice(1).replace("uploads", "image"),
       });
   } catch (error) {
     res.status(500).send({ message: error.message });
     return;
   }
+})
+
+app.get('/image/:filename', (req, res) => {
+  const { filename } = req.params;
+  const pathToImage = `${__dirname}/uploads/${filename}`;
+  res.sendFile(pathToImage);
 })
 
 app.listen(3001, () => {
