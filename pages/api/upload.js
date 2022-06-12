@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   try {
     const imageFile = data.files.file; 
     const imagePath = imageFile.filepath;
-    const pathToWriteImage = `./uploads/${v4()}.${imageFile.originalFilename.split('.').pop()}`;
+    const pathToWriteImage = `public/uploads/${v4()}.${imageFile.originalFilename.split('.').pop()}`;
     const image = await fs.readFile(imagePath);
     await fs.writeFile(pathToWriteImage, image);
     //store path in DB
