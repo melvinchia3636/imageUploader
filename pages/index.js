@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import "animate.css";
+import Head from "next/head";
 
 function UploadFileZone({ uploadFile, error, setError }) {
   const { getRootProps, getInputProps } = useDropzone({
@@ -171,6 +172,10 @@ function App() {
         error ? "text-rose-500" : "text-[#57DCBE]"
       } flex flex-col items-center justify-center pb-10 font-['MiSans']`}
     >
+      <Head>
+        <title>Image Uploader</title>
+        <link rel="icon" href="/favicon.svg" />
+      </Head>
       <div
         className={`w-full sm:w-8/12 lg:w-5/12 max-h-[calc(100%-8rem)] border-2 animate__animated animate__fast ${
           error ? "border-rose-500 animate__shakeX" : "border-[#57DCBE]"
