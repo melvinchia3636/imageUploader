@@ -1,8 +1,44 @@
 /* eslint-disable @next/next/no-img-element */
 import { Icon } from "@iconify/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import "animate.css";
+
+function ListUploadsContainer({ setShowUploads }) {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetch("https://images.thecodeblog.net/list")
+      .then((res) => res.json())
+      .then((data) => {
+        setData(data.images);
+      });
+  });
+
+  return (
+    <div className="w-full h-screen fixed flex top-0 left-0 items-center justify-center bg-black/50">
+      <button
+        onClick={() => setShowUploads(false)}
+        className="absolute top-0 right-0 p-4 w-full h-full"
+      />
+      <div className="w-full relative z-[9999] max-w-[calc(100vw-16rem)] h-[calc(100%-12rem)] flex flex-col items-center p-8 bg-zinc-800 border-2 border-[#57DCBE]">
+        <h2 className="text-2xl text-center mb-8 uppercase tracking-[0.24em]">
+          Uploaded Images
+        </h2>
+        <div className="w-full h-full overflow-y-auto flex flex-wrap gap-2">
+          {data.map((item) => (
+            <div className="border-2 border-[#57DCBE] p-2 flex-grow">
+              <img
+                src={`https://images.thecodeblog.net${item.path}`}
+                className="max-h-32 w-full object-cover "
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function UploadFileZone({ uploadFile, error, setError }) {
   const { getRootProps, getInputProps } = useDropzone({
@@ -114,7 +150,7 @@ function Uploaded({ imageUrl }) {
       </h1>
       <img
         alt=""
-        src={"https://images.thecodeblog.net"+imageUrl}
+        src={"https://images.thecodeblog.net" + imageUrl}
         className="w-full h-full object-contain mt-6 border-2 border-[#57DCBE] p-2"
       />
       <div className="w-full border-2 border-[#57DCBE] overflow-hidden mt-4 flex flex-col sm:flex-row items-center flex-grow-0 h-20">
@@ -127,7 +163,9 @@ function Uploaded({ imageUrl }) {
         <button
           className="px-6 block h-full bg-[#57DCBE] text-zinc-900 whitespace-nowrap font-medium tracking-[0.2rem] !text-xs uppercase py-4 w-full sm:w-auto"
           onClick={() => {
-            navigator.clipboard.writeText(`https://images.thecodeblog.net${imageUrl}`);
+            navigator.clipboard.writeText(
+              `https://images.thecodeblog.net${imageUrl}`
+            );
             setCopied(true);
             setTimeout(() => {
               setCopied(false);
@@ -145,6 +183,7 @@ function App() {
   const [stage, setStage] = useState(0);
   const [error, setError] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [showUploads, setShowUploads] = useState(false);
 
   const uploadFile = async (file) => {
     setStage(1);
@@ -188,6 +227,13 @@ function App() {
           ][stage]
         }
       </div>
+      <button
+        type="button"
+        onClick={() => setShowUploads(true)}
+        className="tracking-[0.2em] font-medium text-sm mt-4 py-4 w-full sm:w-8/12 lg:w-5/12 border-2 border-[#57DCBE] hover:bg-[#57DCBE] hover:text-zinc-800"
+      >
+        SEE ALL UPLOADS
+      </button>
       <p className="text-sm text-center w-full pb-4 absolute bottom-0 left-1/2 -translate-x-1/2">
         Made with 💚 by{" "}
         <a
@@ -200,6 +246,7 @@ function App() {
         </a>
         . Project under MIT license.
       </p>
+      {showUploads && <ListUploadsContainer setShowUploads={setShowUploads} />}
     </main>
   );
 }
